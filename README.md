@@ -35,14 +35,14 @@ In order to properly test the influence of the fine-tuning method in the perform
 
 A good task for our case could be **Sentence Similarity classification**. In Sentence Similarity, the model needs to learn the semantics of the dataset so it can determine if both sentences are related or not. Working with this task allows us to use a dataset framed in a domain to which the model has not been exposed during the pre-training phase.
 
-Taking that into consideration, the chosen dataset has been -> SEARCH!
+Taking that into consideration, the chosen dataset has been [medical_questions_pairs](https://huggingface.co/datasets/medical_questions_pairs). This dataset is composed by ~3K medical sentence pairs (questions). For each question, two different samples has been generated: 1) A reformulated sentence that entails with the original one. 2) A question not related with the original.
 
 
 ### 3.2. Metrics
 Since we are using Semantic Similarity in a classification setup as our target task, we have selected the usual classification metrics for evaluating the different trainings: accuracy, F1 score
 
 ### 3.3. Model
-Selected ***bert-base-cased*** as our backbone model. For accessing and training the model, HF transformers library is being used.
+Selected [bert-base-cased](https://huggingface.co/bert-base-cased) as our backbone model. For accessing and training the model, HF transformers library is being used.
 
 ### 3.4. Experiment setup
 Experiments will be conducted following this order.
