@@ -11,7 +11,5 @@ def compute_metrics(preds):
 
     metrics = {}
 
-    metrics['accuracy'] = round(accuracy_score(labels, predictions), 2)
-    metrics['f1'] = round(f1_score(labels, predictions))
-
+    metrics['accuracy'] = round(accuracy_score(labels, predictions), 4) * 100
     return metrics
