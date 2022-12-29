@@ -66,10 +66,29 @@ Experiments will be conducted following this order.
 
 ## 4. Results
 
-After training all different models, we can make a quick comparison.
-
-**NOTE: We are just using accuracy, since F1-score results were not precise enough to describe the differences.**
+After training all different models, we can make a quick comparison. In the image below, you can see the accuracy metric evolution during the training process (8 epochs) for each experiment.
 
 <figure>
   <img src="./data/images/wandb_accuracy_chart.png" width="550">
 </figure>
+
+**NOTE: We are just using accuracy, since F1-score results were not precise enough to describe the differences.**
+
+<br>
+
+If we extract top performances from each run, the final results are as follows:
+
+<br>
+
+| Model       | Best Accuracy | Best epoch   |
+| ----------- | -----------   |  ----------- |
+| Baseline (Head train)                                     | 68.22        | 8          |
+| Behavioural fine-tuning                                   | 82.24        | 4          |
+| Adaptative fine-tuning + Head train                       | 69.63        | 5          |
+| **Adaptative fine-tuning + Behavioural fine-tuning**      | **85.05**    | **5**      |
+
+<br>
+
+As we can see in the table above, the best result is achieved by mixing both Adaptative and Behavioural fine-tuning approaches.
+
+**Keep in mind that performance differences are relatively low. This is due to the small dataset we are using. With larger datasets, the difference between strategies would be probably higher**. 
