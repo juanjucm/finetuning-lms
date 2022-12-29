@@ -39,7 +39,7 @@ Taking that into consideration, the chosen dataset has been [medical_questions_p
 
 
 ### 3.2. Metrics
-Since we are using Semantic Similarity in a classification setup as our target task, we have selected the usual classification metrics for evaluating the different trainings: accuracy, F1 score
+Since we are using Semantic Similarity in a classification setup as our target task, we have selected the usual classification metrics for evaluating the different trainings: accuracy, F1 score.
 
 ### 3.3. Model
 Selected [bert-base-cased](https://huggingface.co/bert-base-cased) as our backbone model. For accessing and training the model, HF transformers library is being used.
@@ -49,10 +49,32 @@ Experiments will be conducted following this order.
 
 1. First thing to do is to train our baseline. This is, freeze the encoder's weights and train just the FC layer on the classification task objective for a couple of epochs.
 
-2. Next experiment, we performed **Adaptative fine-tuning**. To do so, a initial phase of adaptation is conducted. In this phase, we trained the model with a ML objective (NSP will not be possible, since the dataset is composed by individual sentences). After that adaptation, first experiment's methology is followed , just training the FC layer for a couple of epoch on the classification task.
+2. The second experiment is a test of **Behavioural fine-tuning**. This is the classic setup when fine-tuning a HF bert-like model. Just unfreeze backbone's weights and train them along with the FC layer for the task objective.
 
-3. The third experiment is a test of **Behavioural fine-tuning**. This is the classic setup when fine-tuning a HF bert-like model. Just unfreeze backbone's weights and train them along with the FC layer for the task objective.
+3. Next step, we performed **Adaptative fine-tuning**. In this phase, we trained the model with a ML objective (NSP will not be possible, since the dataset is composed by individual sentences). After that adaptation, a new version of the base encoder is generated. This time, taylored to our specifict semantic domain.
 
-4. Last experiment consists on a mix of both techniques. An initial phase of Adaptative fine-tuning objective, followed by a **Behavioural fine-tuning**. In this setup, backbone's weights are trained twice, first for adapting to the data domain and then to further understand the specific task.
+<figure>
+  <img src="./data/images/AFT.png" width="450">
+</figure>
+
+4. Once we have our custom encoder, it's time to repeat the previous experiments and see if we achieve better results. First of all, again a basic training of the classification head. We will freeze our new encoder's weights and just train the upper dense layers.
+
+<figure>
+  <img src="./data/images/A+HT.png" width="450">
+</figure>
+
+5. Last experiment consists on a mix of both techniques. After an initial phase of Adaptative fine-tuning objective, we perform **Behavioural fine-tuning**. In this setup, our custom backbone's weights are trained twice, first for adapting to the data domain and then to further understand the specific task.
+
+<figure>
+  <img src="./data/images/A+BFT.png" width="450">
+</figure>
 
 ## 4. Results
+
+After training all different models, we can make a quick comparison.
+
+**NOTE: We are just using accuracy, since F1-score results were not precise enough to describe the differences.**
+
+<figure>
+  <img src="./data/images/wandb_accuracy_chart.png" width="550">
+</figure>
