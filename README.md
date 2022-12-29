@@ -53,21 +53,16 @@ Experiments will be conducted following this order.
 
 3. Next step, we performed **Adaptative fine-tuning**. In this phase, we trained the model with a ML objective (NSP will not be possible, since the dataset is composed by individual sentences). After that adaptation, a new version of the base encoder is generated. This time, taylored to our specifict semantic domain.
 
-<figure style="align: left;">
-  <img src="./data/images/AFT.png" width="450">
-</figure>
+    <img src="./data/images/AFT.png" width="450">
+
 
 4. Once we have our custom encoder, it's time to repeat the previous experiments and see if we achieve better results. First of all, again a basic training of the classification head. We will freeze our new encoder's weights and just train the upper dense layers.
 
-<figure style="align: left;">
-  <img src="./data/images/A+HT.png" width="450">
-</figure>
+    <img src="./data/images/A+HT.png" width="450">
 
 5. Last experiment consists on a mix of both techniques. After an initial phase of Adaptative fine-tuning objective, we perform **Behavioural fine-tuning**. In this setup, our custom backbone's weights are trained twice, first for adapting to the data domain and then to further understand the specific task.
 
-<figure style="align: left;">
-  <img src="./data/images/A+BFT.png" width="450">
-</figure>
+    <img src="./data/images/A+BFT.png" width="450">
 
 ## 4. Results
 
