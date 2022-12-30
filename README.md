@@ -10,6 +10,14 @@ This brief research is intended to explore the different fine-tuning approaches 
   </figcaption>
 </figure>
 
+### How to play
+
+To run this notebooks, you will need **Python > 3.8.X**. Also, install the requirements.
+
+```
+pip install -r requirements.txt
+```
+
 ## 1. Technical context
 Let's make a very quick review of the different techniques we want to test:
 
