@@ -88,7 +88,7 @@ Experiments will be conducted following this order.
 
     <img src="./data/images/AFT.png" width="450">
 
-    **During this step, new terms are not being added to the tokenizer's vocabulary. It would require the creation of random vectors in the encoder's embedding matrix. Probably this type of fine-tuning would allow the model to correctly train these new vectors. However, our dataset may not be big enough for that. We will let the model to learn the new vocabulary by understanding the relationships between the subtokens that the tokenizer is probably generating when encoding the unknown terms. Learn more about how BERT tokenizer works [here](https://huggingface.co/docs/transformers/model_doc/bert#transformers.BertTokenizer)**
+    **During this step, new terms are not being added to the tokenizer's vocabulary. It would require the creation of random vectors in the encoder's embedding matrix. Probably this type of fine-tuning would allow the model to correctly train these new vectors. However, our dataset may not be big enough for that. We will let the model to learn the new vocabulary by understanding the relationships between the subtokens that the tokenizer is probably generating when encoding the unknown terms. Learn more about how BERT tokenizer works [here](https://huggingface.co/docs/transformers/model_doc/bert#transformers.BertTokenizer)**.
 
 
 4. Once we have our custom encoder, it's time to repeat the previous experiments and see if we achieve better results. First of all, again a basic training of the classification head. We will freeze our new encoder's weights and just train the upper dense layers.
@@ -100,7 +100,9 @@ Experiments will be conducted following this order.
     <img src="./data/images/A+BFT.png" width="450">
 
 
-**We have conducted the experiments in [Google Colab](https://colab.research.google.com/) environment.**
+**We have conducted the experiments in [Google Colab](https://colab.research.google.com/) environment**.
+
+**For logging the experiments, storing the models and comparing results, we have used [Weight&Biases](https://wandb.ai/site)**.
 
 ## 4. Results
 
