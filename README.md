@@ -12,7 +12,7 @@ This brief research is intended to explore the different fine-tuning approaches 
 
 ### How to play
 
-To run this notebooks, you will need **Python > 3.8.X**. Also, install the requirements.
+To run these notebooks, you will need **Python > 3.8.X**. Also, install the requirements.
 
 ```
 pip install -r requirements.txt
