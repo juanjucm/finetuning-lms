@@ -44,6 +44,8 @@ A good task for our case could be **Sentence Similarity classification**. In Sen
 
 Taking that into consideration, the chosen dataset has been [medical_questions_pairs](https://huggingface.co/datasets/medical_questions_pairs). This dataset is composed by ~3K medical sentence pairs (questions). For each question, two different samples has been generated: 1) A reformulated sentence that entails with the original one. 2) A question not related with the original.
 
+Being more specific on the numbers, the dataset is contains a total of 3048 examples. We have splitted them into train and test. For training, we have assigned 2834 samples (93%). For testing, 214 (7%). We don't have a third set, since we will evaluate results with just one set.
+
 
 ### 3.2. Metrics
 Since we are using Semantic Similarity in a classification setup as our target task, we have selected the usual classification metrics for evaluating the different trainings: accuracy, F1 score.
