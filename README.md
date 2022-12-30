@@ -1,10 +1,9 @@
 # Fine-tuning MLMs 🤖⚙️
 
-This brief research is intended to explore the different fine-tuning approaches that can be applied for adapting bert-like MLMs to a custom domain datasets.
+This brief research is intended to explore the different fine-tuning approaches that can be applied for adapting bert-like models to a custom dataset and task.
 
 <figure>
   <img src="./data/images/adaptive_fine-tuning.png">
-  
   <figcaption style='text-align:center';>
   Framework for fine-tuning LMs. 
   <a href="https://ruder.io/recent-advances-lm-fine-tuning/">Sebastian Rude's post</a>
@@ -41,8 +40,42 @@ Taking that into consideration, the chosen dataset has been [medical_questions_p
 ### 3.2. Metrics
 Since we are using Semantic Similarity in a classification setup as our target task, we have selected the usual classification metrics for evaluating the different trainings: accuracy, F1 score.
 
-### 3.3. Model
-Selected [bert-base-cased](https://huggingface.co/bert-base-cased) as our backbone model. For accessing and training the model, HF transformers library is being used.
+### 3.3. Model and training hyperparameters
+Selected [bert-base-cased](https://huggingface.co/bert-base-cased) as our backbone model. For accessing and training the model, [HF transformers library](https://huggingface.co/docs/transformers/index) is being used.
+
+For the experiments to be reproducible, I think it's worth to stablish the set of hyperparameters we will be using for training all experiments. You can see them in the table below.
+
+<br>
+
+| Hyperparameter       | Value |
+| ----------- | -----------   |
+| Per-device train batch size                       | 8 |
+| Per-device eval batch size                        | 8 |
+| Num train epochs                                  | 8 |
+| Optimizer                                         | [AdamW](https://huggingface.co/docs/transformers/v4.25.1/en/main_classes/optimizer_schedules#transformers.AdamW)
+| Scheduler                                         | [Linear with warmup](https://huggingface.co/docs/transformers/v4.25.1/en/main_classes/optimizer_schedules#transformers.get_linear_schedule_with_warmup)
+| Learning rate                                     | 2e-5 |
+| Weight decay                                      | 0.01 |
+
+<br>
+
+Also, the hyperparameters used durign the **Adaptative fine-tuning** phase.
+
+| Hyperparameter       | Value |
+| ----------- | -----------   |
+| Per-device train batch size                       | 16 |
+| Per-device eval batch size                        | 16 |
+| Num train epochs                                  | 8 |
+| Optimizer                                         | [AdamW](https://huggingface.co/docs/transformers/v4.25.1/en/main_classes/optimizer_schedules#transformers.AdamW)
+| Scheduler                                         | [Linear with warmup](https://huggingface.co/docs/transformers/v4.25.1/en/main_classes/optimizer_schedules#transformers.get_linear_schedule_with_warmup)
+| Learning rate                                     | 1e-5 |
+| Weight decay                                      | 0.01 |
+
+<br>
+
+**NOTE: learning-rate is lower here since we don't want to 'erase' the encoder's pre-training knowledge. Just to get a subtle adaptation.**
+
+These are the main hyperparameters. For the rest of them (dropout, num_hidden_layers, etc), we take the default value stablished in [TrainingArguments class](https://huggingface.co/docs/transformers/v4.25.1/en/main_classes/trainer#transformers.TrainingArguments).
 
 ### 3.4. Experiment setup
 Experiments will be conducted following this order.
@@ -55,6 +88,8 @@ Experiments will be conducted following this order.
 
     <img src="./data/images/AFT.png" width="450">
 
+    **During this step, new terms are not being added to the tokenizer's vocabulary. It would require the creation of random vectors in the encoder's embedding matrix. Probably this type of fine-tuning would allow the model to correctly train these new vectors. However, our dataset may not be big enough for that. We will let the model to learn the new vocabulary by understanding the relationships between the subtokens that the tokenizer is probably generating when encoding the unknown terms. Learn more about how BERT tokenizer works [here](https://huggingface.co/docs/transformers/model_doc/bert#transformers.BertTokenizer)**
+
 
 4. Once we have our custom encoder, it's time to repeat the previous experiments and see if we achieve better results. First of all, again a basic training of the classification head. We will freeze our new encoder's weights and just train the upper dense layers.
 
@@ -63,6 +98,9 @@ Experiments will be conducted following this order.
 5. Last experiment consists on a mix of both techniques. After an initial phase of Adaptative fine-tuning objective, we perform **Behavioural fine-tuning**. In this setup, our custom backbone's weights are trained twice, first for adapting to the data domain and then to further understand the specific task.
 
     <img src="./data/images/A+BFT.png" width="450">
+
+
+**We have conducted the experiments in [Google Colab](https://colab.research.google.com/) environment.**
 
 ## 4. Results
 
@@ -89,6 +127,28 @@ If we extract top performances from each run, the final results are as follows:
 
 <br>
 
-As we can see in the table above, the best result is achieved by mixing both Adaptative and Behavioural fine-tuning approaches.
+First of all, our baseline training sets a reference score of 68.22% of accuracy.
+
+Our next experiment, the behavioural fine-tuning over an 'stock' BERT checkpoint, achieves a 82.24% o accuracy. This shows how letting the backbone being adapted to the specific target task has great benefits on the result.
+
+Last two experiments are performed after our adaptative fine-tuning run over the standard BERT checkpoint. During that process, we expected the model to be further specialiced in our specific domain, leading to better results on downstream tasks (like the classification problem we are tackling).
+
+First, we re-trained our just-head experiment, this time using our custom backbone. Again, for this experiment we are freezing the backbone's weights and just trainig the classification head. Results are slightly better compared than the baseline test, getting a 69,63% of accuracy.
+
+Last experiment, we just used our custom backbone to perform a behavioural fine-tuning. Following this strategy, in which we let the backbone to adjust its weights, we are training the whole thing to be adapted to our specific task. As expected, we got our best result with an accuracy score of 85.05%.
 
 **Keep in mind that performance differences are relatively low. This is due to the small dataset we are using. With larger datasets, the difference between strategies would be probably higher**. 
+
+Taking all of this into consideration, we have correctly confirmed our hypothesis. BERT-like models are a very powerful NLP modules that allows us to perform a wide variety of NLP tasks, even when they have not been explicitly trained from scratch to fit that task and/or semantic domain. A dual fine-tuning phase, first for adapting to the target domain and then for learning the objective task, would be a good way to extract all the potential out of these models.
+
+## 5. References
+
+* [Sebastian Ruder's post on fine-tuning strategies](https://ruder.io/recent-advances-lm-fine-tuning/)
+
+* [Huggingface Transformers library](https://huggingface.co/docs/transformers/index)
+
+* [Medical questions pairs dataset](https://huggingface.co/datasets/medical_questions_pairs)
+
+* [Extra methods for adaptative fine-tuning](https://huggingface.co/course/chapter7/3?fw=tf#preprocessing-the-data)
+
+* [How to increase BERT tokenizer's vocabulary](https://medium.com/@pierre_guillou/nlp-how-to-add-a-domain-specific-vocabulary-new-tokens-to-a-subword-tokenizer-already-trained-33ab15613a41)
