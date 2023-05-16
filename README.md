@@ -23,7 +23,7 @@ Let's make a very quick review of the different techniques we want to test:
 
 1. **Base model training**: We will use a pretrained language model as an embedding generator. A simple FC layer will be trained for a classification task.
 
-2. **Adaptative fine-tuning (augmented pre-training)**: Pretrained LM are robust in terms of o.o.d generalization. However, they still suffer when dealing with data belonging to an unseen domain. This training method involves fine-tuning the model so it can be adapted to a desired (new) domain.
+2. **Adaptive fine-tuning (augmented pre-training)**: Pretrained LM are robust in terms of o.o.d generalization. However, they still suffer when dealing with data belonging to an unseen domain. This training method involves fine-tuning the model so it can be adapted to a desired (new) domain.
     
     This is done using the same objectives as in the pre-training phase: **MLM** and **NSP** (BERT). This technique is useful to generate models when high performance is needed in a set of tasks within a specific data domain.
 
@@ -32,7 +32,7 @@ Let's make a very quick review of the different techniques we want to test:
 For a wider explanation, please visit [Sebastian Ruder's amazing blog post](https://ruder.io/recent-advances-lm-fine-tuning/)
 
 ## 2. Hypothesis
-Adaptative fine-tuning outperforms base model training. Behavioural fine-tuning outperforms adaptative fine-tuning. Adaptative + behavioural fine-tuning will achieve the best results.
+Adaptive fine-tuning outperforms base model training. Behavioural fine-tuning outperforms adaptive fine-tuning. Adaptive + behavioural fine-tuning will achieve the best results.
 
 ## 3. Methodology
 For conducting the experiments, proper dataset/task needs to be selected. The data needs to be different enough (in terms of domain) so the adaptation becomes a key aspect. Appart from that, we have to choose a base model and define the experiments, as well as define a set of metrics.
@@ -69,7 +69,7 @@ For the experiments to be reproducible, I think it's worth to stablish the set o
 
 <br>
 
-Also, the hyperparameters used durign the **Adaptative fine-tuning** phase.
+Also, the hyperparameters used durign the **Adaptive fine-tuning** phase.
 
 | Hyperparameter       | Value |
 | ----------- | -----------   |
@@ -94,7 +94,7 @@ Experiments will be conducted following this order.
 
 2. The second experiment is a test of **Behavioural fine-tuning**. This is the classic setup when fine-tuning a HF bert-like model. Just unfreeze backbone's weights and train them along with the FC layer for the task objective.
 
-3. Next step, we performed **Adaptative fine-tuning**. In this phase, we trained the model with a ML objective (NSP will not be possible, since the dataset is composed by individual sentences). After that adaptation, a new version of the base encoder is generated. This time, taylored to our specifict semantic domain.
+3. Next step, we performed **Adaptive fine-tuning**. In this phase, we trained the model with a ML objective (NSP will not be possible, since the dataset is composed by individual sentences). After that adaptation, a new version of the base encoder is generated. This time, taylored to our specifict semantic domain.
 
     <img src="./data/images/AFT.png" width="450">
 
